@@ -25,7 +25,7 @@ export async function getHomePage() {
   const res = await contentful.getEntries({
     content_type: "homePage-2", // MUST match Contentful "API Identifier"
     "fields.slug": slug,
-    include: 3,
+    include: 10,
     limit: 1,
   });
 
