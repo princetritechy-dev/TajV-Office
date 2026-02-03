@@ -170,7 +170,7 @@ export default async function Home() {
                     benefits.map((b: any, i: number) => (
                       <li key={i}>
                         <span className="check" aria-hidden="true">
-                            <img src="/symbol.png" alt="" width="16" height="16" />
+                            <img src="/Symbol.png" alt="" width="16" height="16" />
                         </span>
 
                         {b.text ?? b.title ?? b.benefitText ?? b.label ?? ""}
