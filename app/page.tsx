@@ -43,6 +43,9 @@ export default async function Home() {
   console.log("recieveCards raw:", f.recieveCards);
   console.log("pickLocations fields:", pickLocations);
   console.log("pickLocations raw:", f.pickLocations);
+  console.log("Hero BG:", f.heroBannerImage);
+  console.log("compilanceSection raw:", f?.complianceSection);
+
 
   const heroTitle1 = f.heroTitleLine1 || "Your UK Business";
   const heroTitle2 = f.heroTitleLine2 || "Address. Anywhere.";
@@ -50,6 +53,10 @@ export default async function Home() {
   const heroBtn1Url = f.heroButton1Url || "#";
   const heroBtn2Text = f.heroButton2Text || "Choose Your Address";
   const heroBtn2Url = f.heroButton2Url || "#";
+  const heroBg =
+  f.heroBannerImage?.fields?.file?.url
+    ? `https:${f.heroBannerImage.fields.file.url}`
+    : "";
 
   const pickTitle = f.pickTitle || "Pick Your Perfect Business Address";
   const pickSubtitle =
@@ -62,24 +69,11 @@ export default async function Home() {
 
       <header className="site-header">
         <div className="container header-inner">
+          <div className="virtualoffice_logo_wrapper">
           <a className="brand" href="#">
-            <span className="brand-mark" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="14" cy="9" r="4" fill="#17c3a6" />
-                <path
-                  d="M14 13C9.58172 13 6 16.5817 6 21V23H22V21C22 16.5817 18.4183 13 14 13Z"
-                  fill="#0b2d6a"
-                  opacity="0.15"
-                />
-                <path d="M14 13C9.58172 13 6 16.5817 6 21" stroke="#0b2d6a" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </span>
-            <span className="brand-text">
-              <span className="brand-title">VIRTUAL</span>
-              <span className="brand-sub">OFFICE ANYWHERE</span>
-            </span>
+            <img src="/logo.png" alt=""/>
           </a>
-
+        </div>
           <button className="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">
             <span></span>
             <span></span>
@@ -102,12 +96,14 @@ export default async function Home() {
       <main>
         {/* HERO */}
         <section className="hero">
-          <div className="hero-bg" aria-hidden="true"></div>
+          <div className="hero-bg"
+              aria-hidden="true"
+              style={{ backgroundImage: heroBg ? `url(${heroBg})` : "none" }}>
 
-          <div className="container hero-inner">
+<div className="container hero-inner">
             <div className="hero-left">
               <h1 className="hero-title">
-                {heroTitle1} <br />
+                {heroTitle1} 
                 <span>{heroTitle2}</span>
               </h1>
 
@@ -116,7 +112,7 @@ export default async function Home() {
               </div>
 
               <div className="hero-actions">
-                <a className="btn btn-primary" href={heroBtn1Url}>
+                <a className="btn btn-primary1" href={heroBtn1Url}>
                   {heroBtn1Text}
                 </a>
                 <a className="btn btn-outline" href={heroBtn2Url}>
@@ -132,10 +128,12 @@ export default async function Home() {
             <div className="hero-right">
               <div className="hero-card">
                 <div className="hero-card-top">
-                  <span className="dot"></span>
-                  <span className="hc-label">Active Address</span>
+                  <div className="topcard-imgsec"><img src="/icon.png" alt="Building Icon" className="hc-icon" /></div>
+                  <div className="top-card-titlesec">
+                    <span className="hc-label">Active Address</span>
+                  <div className="hc-title">Mayfair, London</div>
+                  </div>
                 </div>
-                <div className="hc-title">Mayfair, London</div>
                 <div className="hc-lines">
                   <span></span>
                   <span></span>
@@ -144,12 +142,14 @@ export default async function Home() {
               </div>
             </div>
           </div>
+          </div>
+          
         </section>
 
         {/* WHY + BENEFITS */}
         <section className="why">
-          <div className="container why-inner">
-            <div className="why-left">
+          <div className="why-inner sec-max-wid">
+            <div className="why-left why-col-common">
               <h2 className="section-title">{f.whyTitle || "Why Choose Virtual Office Anywhere"}</h2>
               <p className="section-lead">{f.whySubtitle || "A virtual office service designed to support your business"}</p>
 
@@ -161,7 +161,7 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="why-right">
+            <div className="why-right why-col-common">
               <div className="benefits-card">
                 <h3 className="benefits-title">Benefits of choosing us</h3>
 
@@ -170,10 +170,9 @@ export default async function Home() {
                     benefits.map((b: any, i: number) => (
                       <li key={i}>
                         <span className="check" aria-hidden="true">
-                          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.9 13.6 4.7 10.4 3.5 11.6 7.9 16 16.5 7.4 15.3 6.2 7.9 13.6Z" fill="#17c3a6" />
-                          </svg>
+                            <img src="/symbol.png" alt="" width="16" height="16" />
                         </span>
+
                         {b.text ?? b.title ?? b.benefitText ?? b.label ?? ""}
                       </li>
                     ))
@@ -201,26 +200,34 @@ export default async function Home() {
                   const linkText = c.linkText || "";
 
                   return (
-                    <article key={i} className={`rcard ${c.isHighlighted ? "rcard-active" : ""}`}>
-                      <div className="rcard-icon" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                          <path d="M4 7.5C4 6.12 5.12 5 6.5 5H17.5C18.88 5 20 6.12 20 7.5V18.5C20 19.88 18.88 21 17.5 21H6.5C5.12 21 4 19.88 4 18.5V7.5Z" stroke="#0b2d6a" strokeWidth="1.8" />
-                          <path d="M8 9H16" stroke="#0b2d6a" strokeWidth="1.8" strokeLinecap="round" />
-                        </svg>
-                      </div>
+                    <article
+                    key={i}
+                    className={`rcard ${c.isHighlighted ? "rcard-active" : ""}`}
+                  >
+                  <div className="rcard-icon" aria-hidden="true">
+                    {c.icon?.fields?.file?.url && (
+                      <img
+                        src={`https:${c.icon.fields.file.url}`}
+                        alt={c.icon.fields.title ?? ""}
+                        width={22}
+                        height={22}
+                      />
+                    )}
+                  </div>
 
-                      <h3>{c.title ?? ""}</h3>
-                      <p className="rcard-meta">{c.metaLabel ?? ""}</p>
-                      <p className="rcard-text">{c.description ?? ""}</p>
+                  <h3>{c.title ?? ""}</h3>
+                  <p className="rcard-meta">{c.metaLabel ?? ""}</p>
+                  <p className="rcard-text">{c.description ?? ""}</p>
 
-                      {linkText ? (
-                        <a className="rcard-link" href={href}>
-                          {linkText}
-                        </a>
-                      ) : null}
+                  {linkText ? (
+                    <a className="rcard-link" href={href}>
+                      {linkText}
+                    </a>
+                  ) : null}
 
-                      <p className="rcard-subtext">{c.subText ?? ""}</p>
-                    </article>
+                  <p className="rcard-subtext">{c.subText ?? ""}</p>
+                </article>
+
                   );
                 })
               ) : (
@@ -279,8 +286,8 @@ export default async function Home() {
         {/* HOW IT WORKS */}
         <section className="how">
           <div className="container">
-            <h2 className="section-title center light">How It Works</h2>
-            <p className="muted center light-sub">A simple setup with support at every step</p>
+            <h2 className="section-title center light" style={{color:"#FFFFFF"}}>How It Works</h2>
+            <p className="muted center light-sub howitworks" style={{color:"#D1D5DB"}}>A simple setup with support at every step</p>
 
             <div className="how-grid">
               {steps.map((s: any, i: number) => (
@@ -296,46 +303,66 @@ export default async function Home() {
           </div>
         </section>
        {/* COMPLIANCE & SECURITY */}
-{f.complianceSection?.fields ? (
-  <section className="compliance">
-    <div className="container">
-      <h2 className="section-title">
-        {f.complianceSection?.fields?.title || "Compliance and Security"}
-      </h2>
+        {(() => {
+          // compilanceSection is ARRAY in your API response
+          const csEntry = Array.isArray(f?.compilanceSection)
+            ? f.compilanceSection[0]
+            : f?.compilanceSection;
 
-      <p className="muted">
-        {f.complianceSection?.fields?.subtitle || "We keep things simple while protecting your business"}
-      </p>
+          const cs = csEntry?.fields;
+          if (!cs) return null;
 
-      <div className="compliance-grid">
-        {(f.complianceSection?.fields?.complianceItem || [])
-          .map((x: any) => x?.fields || null)
-          .filter(Boolean)
-          .map((item: any, i: number) => (
-            <div className="compliance-card" key={i}>
-              <h3>{item.title || ""}</h3>
-              <p>{item.description || ""}</p>
-            </div>
-          ))}
-      </div>
-    </div>
-  </section>
-) : null}
+          // complianceItem is also array (or sometimes single)
+          const raw = cs?.complianceItem || [];
+          const items = Array.isArray(raw) ? raw : raw ? [raw] : [];
+
+          const finalItems = items
+            .map((x: any) => x?.fields || null)
+            .filter(Boolean);
+
+          return (
+            <section className="compliance">
+              <div className="container">
+                <h2 className="section-title">
+                  {cs.title || "Compliance and Security"}
+                </h2>
+
+                <p className="muted">
+                  {cs.subtitle || "We keep things simple while protecting your business"}
+                </p>
+
+                <div className="compliance-grid">
+                  {finalItems.map((item: any, i: number) => (
+                    <div className="compliance-card" key={i}>
+                      <h3>{item.title || ""}</h3>
+                      <p>{item.description || ""}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        })()}
+
 
         {/* PLATFORM FEATURES */}
         <section className="platform">
           <div className="container">
-            <h2 className="section-title center">Platform Features</h2>
-            <p className="muted center">Everything you need in one place.</p>
+            <h2 className="section-title center platform-heading">Platform Features</h2>
+            <p className="muted center platform plaform-subtitle">Everything you need in one place.</p>
 
             <div className="platform-grid">
               {features.map((p: any, i: number) => (
                 <div className="p-card" key={i}>
                   <div className="p-ic" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                      <path d="M4 5h16v14H4V5Z" stroke="#0b2d6a" strokeWidth="1.8" />
-                      <path d="M7 9h6M7 13h10" stroke="#0b2d6a" strokeWidth="1.8" strokeLinecap="round" />
-                    </svg>
+                    {p.icon?.fields?.file?.url ? (
+                      <img
+                        src={`https:${p.icon.fields.file.url}`}
+                        alt=""
+                        width="22"
+                        height="22"
+                      />
+                    ) : null}
                   </div>
                   <h3>{p.title}</h3>
                   <p>{p.description}</p>
@@ -354,7 +381,9 @@ export default async function Home() {
               {testimonials.map((t: any, i: number) => (
                 <article className="testi-card" key={i}>
                   <div className="stars" aria-hidden="true">
-                    {"★★★★★".slice(0, Math.min(5, Number(t.stars || 5)))}
+                    {Array.from({ length: Math.min(5, Number(t.stars || 5)) }).map((_, i) => (
+                      <i key={i} className="fas fa-star" />
+                    ))}
                   </div>
                   <p>“{t.quote}”</p>
                   <div className="testi-name">— {t.name}</div>
@@ -367,16 +396,15 @@ export default async function Home() {
         {/* FAQ */}
         <section className="faq">
           <div className="container">
-            <h2 className="section-title center">Frequently Asked Questions</h2>
+            <h2 className="section-title center faq">Frequently Asked Questions</h2>
 
             <div className="faq-box">
               {faqs.map((q: any, i: number) => (
-                <div key={i}>
+                <div className="fq-content" key={i}>
                   <button className="faq-q" type="button" aria-expanded="false">
                     <span>{q.question}</span>
-                    <span className="faq-icon" aria-hidden="true"></span>
                   </button>
-                  <div className="faq-a" hidden>
+                  <div className="faq-a">
                     {q.answer}
                   </div>
                 </div>
@@ -390,8 +418,7 @@ export default async function Home() {
         <div className="container footer-inner">
           <div className="footer-brand">
             <div className="brand-text">
-              <div className="brand-title">VIRTUAL</div>
-              <div className="brand-sub">OFFICE ANYWHERE</div>
+              <img src="/logo2.png" alt="" style={{height:"60px"}} />
             </div>
           </div>
           <div className="footer-copy">© 2025 Virtual Office Anywhere. All rights reserved.</div>
